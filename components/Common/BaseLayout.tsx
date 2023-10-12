@@ -1,4 +1,5 @@
-import { useTheme } from '@emotion/react'
+import { mq } from '@/utils/common'
+import { css, useTheme } from '@emotion/react'
 import React from 'react'
 
 interface BaseLayoutProps {
@@ -17,11 +18,15 @@ const BaseLayout = ({ children, ...props }: BaseLayoutProps) => {
 			}}
 		>
 			<div
-				css={{
-					marginLeft: 'auto',
-					marginRight: 'auto',
-					width: `70%`,
-				}}
+				css={css(
+					{
+						marginLeft: 'auto',
+						marginRight: 'auto',
+					},
+					mq({
+						width: [`90%`, `70%`],
+					})
+				)}
 				{...props}
 			>
 				{children}

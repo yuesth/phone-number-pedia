@@ -1,5 +1,5 @@
 import '@/styles/globals.css'
-import { GlobalStyles } from '@/themes/GlobalStyle'
+import { GlobalStyles } from '@/styles/GlobalStyle'
 import { baseTheme } from '@/themes/base'
 import { ThemeProvider } from '@emotion/react'
 import type { AppProps } from 'next/app'
