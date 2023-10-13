@@ -9,9 +9,52 @@ import {
 import { body, title1 } from '@/styles/typography'
 import { mq } from '@/utils/common'
 import Button from '../Common/Button'
+import { ContactQueries } from '@/quries/contact'
+import { useMutation } from '@apollo/client'
+import { useToast } from '@/providers/ToastProvider'
 
-const DeleteModal = ({ isOpen, onClose, style }: DeleteModalProps) => {
+const DeleteModal = ({
+	isOpen,
+	onClose,
+	style,
+	data,
+	refetch,
+}: DeleteModalProps) => {
 	const theme = useTheme()
+	const { deleteContact } = ContactQueries()
+	const { setShowToastWithTimeout } = useToast()
+	const [mutateDelete, { loading }] = useMutation(deleteContact)
+
+	const onDelete = async () => {
+		try {
+			await mutateDelete({
+				variables: {
+					id: data?.id,
+				},
+			})
+			onClose()
+			setShowToastWithTimeout(
+				{
+					message: 'Contact deleted successfully',
+					type: 'success',
+				},
+				5000
+			)
+			await refetch?.({
+				limit: 10,
+				offset: 0,
+			})
+		} catch (error) {
+			onClose()
+			setShowToastWithTimeout(
+				{
+					message: 'Error to delete contact',
+					type: 'error',
+				},
+				5000
+			)
+		}
+	}
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} style={style}>
@@ -49,10 +92,11 @@ const DeleteModal = ({ isOpen, onClose, style }: DeleteModalProps) => {
 						})
 					)}
 				>
-					Are you sure want to delete this phone number?
+					Are you sure want to delete this phone number{' '}
+					<strong>({data?.phones?.[0].number})</strong>?
 				</p>
-				<Button color="danger" isFullWidth onClick={() => {}}>
-					Delete
+				<Button color="danger" isFullWidth onClick={onDelete}>
+					{loading ? 'Loading...' : 'Delete'}
 				</Button>
 			</div>
 		</Modal>

@@ -13,11 +13,15 @@ export interface InputTextProps {
 }
 
 export interface AddModalFormValues {
-	name: string
+	first_name: string
+	last_name: string
 	phone_number: string
+	phones: { number: string }[]
 }
 
 export interface EditModalFormValues {
-	name: string
+	first_name: string
+	last_name: string
 	phone_number: string
+	phones: { number: string }[]
 }

@@ -25,6 +25,17 @@ export const title1 = (theme: Theme, ...obj: CSSInterpolation[]) => {
 	)
 }
 
+export const title2 = (theme: Theme, ...obj: CSSInterpolation[]) => {
+	return css(
+		mq({
+			fontSize: [theme.fontSize.sm, theme.fontSize.base],
+			fontWeight: theme.fontWeight.semibold,
+		}),
+		marginVertical(theme, 2),
+		obj
+	)
+}
+
 export const body = (theme: Theme, ...obj: CSSInterpolation[]) => {
 	return css(
 		mq({
