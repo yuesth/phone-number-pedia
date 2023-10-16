@@ -5,7 +5,7 @@ const Header = ({
 	description = 'Saved your favorite phone number',
 	keywords = 'react, next, emotion, jest, rtl, graphql',
 	image = 'https://res.cloudinary.com/imagestorageyues/image/upload/v1697423038/k87S0gss_400x400_1_lb1708.png',
-	url = 'https://abc.me',
+	url = 'https://phone-number-pedia.vercel.app/',
 }) => {
 	return (
 		<Head>

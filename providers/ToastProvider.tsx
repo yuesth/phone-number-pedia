@@ -94,7 +94,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 							<p
 								css={css(
 									body(theme, {
-										fontSize: theme.fontWeight.bold,
+										fontWeight: theme.fontWeight.bold,
 										color: `white`,
 									})
 								)}
