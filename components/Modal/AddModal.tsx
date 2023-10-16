@@ -19,7 +19,13 @@ import { useToast } from '@/providers/ToastProvider'
 import IconPlus from '../Svg/IconPlus'
 import IconTrash from '../Svg/IconTrash'
 
-const AddModal = ({ isOpen, onClose, style, refetch }: AddModalProps) => {
+const AddModal = ({
+	isOpen,
+	onClose,
+	style,
+	refetch,
+	refetchPhoneList,
+}: AddModalProps) => {
 	const theme = useTheme()
 	const { addContactWithPhones } = ContactQueries()
 	const { setShowToastWithTimeout } = useToast()
@@ -108,6 +114,20 @@ const AddModal = ({ isOpen, onClose, style, refetch }: AddModalProps) => {
 						{...register('first_name', {
 							required: true,
 							pattern: /^[a-zA-Z0-9]+$/,
+							validate: async (value) => {
+								const res = await refetchPhoneList?.({
+									variables: {
+										where: {
+											contact: {
+												first_name: {
+													_like: `${value}`,
+												},
+											},
+										},
+									},
+								})
+								return `${res?.data?.phone.length || 0}` < '1'
+							},
 						})}
 						label={'First Name'}
 						placeholder="Enter first name..."
@@ -115,8 +135,12 @@ const AddModal = ({ isOpen, onClose, style, refetch }: AddModalProps) => {
 							marginBottom: theme.spacing[3],
 						}}
 						errorMessage={
-							errors.first_name?.type === 'required' &&
-							`You must fill first name`
+							errors.first_name?.type === 'required'
+								? `You must fill first name`
+								: errors.first_name?.type === 'pattern'
+								? `First name must not contain special characters`
+								: errors.first_name?.type === 'validate' &&
+								  `First name must be unique`
 						}
 					/>
 					<InputText
@@ -128,6 +152,10 @@ const AddModal = ({ isOpen, onClose, style, refetch }: AddModalProps) => {
 						parentStyle={{
 							marginBottom: theme.spacing[3],
 						}}
+						errorMessage={
+							errors.last_name?.type === 'pattern' &&
+							`Last name must not contain special characters`
+						}
 					/>
 					<div
 						css={css({
@@ -166,7 +194,7 @@ const AddModal = ({ isOpen, onClose, style, refetch }: AddModalProps) => {
 										marginBottom: theme.spacing[2],
 									}}
 									errorMessage={
-										errors.phones?.[idx]?.type === 'required' &&
+										errors.phones?.[idx]?.number?.type === 'required' &&
 										`You must fill phone number`
 									}
 								/>

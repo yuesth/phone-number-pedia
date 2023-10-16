@@ -35,6 +35,7 @@ const InputText = forwardRef<HTMLInputElement, InputTextProps>((props, ref) => {
 			)}
 			<input
 				type="text"
+				data-testid={`input-${props.name}`}
 				ref={ref}
 				id={props.name}
 				name={props.name}

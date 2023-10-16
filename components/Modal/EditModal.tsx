@@ -25,6 +25,7 @@ const EditModal = ({
 	style,
 	data,
 	refetch,
+	refetchPhoneList,
 }: EditModalProps) => {
 	const theme = useTheme()
 	const { setShowToastWithTimeout } = useToast()
@@ -132,44 +133,54 @@ const EditModal = ({
 						})
 					)}
 				>
-					Edit Phone Number
+					Edit Contact
 				</p>
 				<form onSubmit={handleSubmit(onEdit)}>
 					<InputText
-						{...register('first_name', { required: true })}
+						{...register('first_name', {
+							required: true,
+							pattern: /^[a-zA-Z0-9]+$/,
+							validate: async (value) => {
+								const res = await refetchPhoneList?.({
+									variables: {
+										where: {
+											contact: {
+												first_name: {
+													_like: `${value}`,
+												},
+											},
+										},
+									},
+								})
+								return `${res?.data?.phone.length || 0}` < '1'
+							},
+						})}
 						label={'First Name'}
 						placeholder="Enter first name..."
 						parentStyle={{
 							marginBottom: theme.spacing[3],
 						}}
 						errorMessage={
-							errors.first_name?.type === 'required' &&
-							`You must fill first name`
+							errors.first_name?.type === 'required'
+								? `You must fill first name`
+								: errors.first_name?.type === 'pattern'
+								? `First name must not contain special characters`
+								: errors.first_name?.type === 'validate' &&
+								  `First name must be unique`
 						}
 					/>
 					<InputText
-						{...register('last_name', { required: true })}
+						{...register('last_name', { pattern: /^[a-zA-Z0-9]+$/ })}
 						label={'Last Name'}
 						placeholder="Enter last name..."
 						parentStyle={{
 							marginBottom: theme.spacing[3],
 						}}
 						errorMessage={
-							errors.last_name?.type === 'required' && `You must fill last name`
+							errors.last_name?.type === 'pattern' &&
+							`Last name must not contain special characters`
 						}
 					/>
-					{/* <InputText
-						{...register('phone_number', { required: true })}
-						label={'Phone Number'}
-						placeholder="Enter phone number"
-						parentStyle={{
-							marginBottom: theme.spacing[5],
-						}}
-						errorMessage={
-							errors.phone_number?.type === 'required' &&
-							`You must fill phone number`
-						}
-					/> */}
 					<div
 						css={css({
 							display: `flex`,
@@ -207,7 +218,7 @@ const EditModal = ({
 										marginBottom: theme.spacing[2],
 									}}
 									errorMessage={
-										errors.phones?.[idx]?.type === 'required' &&
+										errors.phones?.[idx]?.number?.type === 'required' &&
 										`You must fill phone number`
 									}
 								/>

@@ -7,4 +7,5 @@ export interface IconProps {
 	onClick?: () => void
 	isDisabled?: boolean
 	style?: CSSInterpolation
+	testId?: string
 }

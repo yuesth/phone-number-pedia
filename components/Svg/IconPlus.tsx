@@ -13,6 +13,7 @@ const IconPlus = ({ size, className, style, onClick }: IconProps) => {
 			strokeLinejoin="round"
 			css={style}
 			onClick={onClick}
+			data-testid="plus"
 		>
 			<path stroke="none" d="M0 0h24v24H0z" fill="none" />
 			<path d="M12 5l0 14" />

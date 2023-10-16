@@ -15,16 +15,17 @@ const Card = (props: CardProps) => {
 			<div>
 				<p css={title1(theme)}>
 					{prettyTruncate(
-						props.data.first_name + ' ' + props.data.last_name || '',
+						props.data?.first_name + ' ' + props.data?.last_name || '',
 						25
 					)}
 				</p>
-				<p css={body(theme)}>{props.data.phones?.[0].number}</p>
+				<p css={body(theme)}>{props.data.phones?.[0]?.number}</p>
 			</div>
 			<div css={buttonCard()}>
 				<div>
 					<Iconfavorite
 						size={20}
+						testId={`${props.data.first_name}`}
 						style={css(
 							{
 								stroke: !props.favorites.includes(props.data.id || 0)

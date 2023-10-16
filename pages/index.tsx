@@ -19,7 +19,7 @@ import { ContactQueries } from '@/quries/contact'
 import { marginVertical } from '@/styles/common'
 import { body, label } from '@/styles/typography'
 import { debounce, mq, updateLocalStorage } from '@/utils/common'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import { css, useTheme } from '@emotion/react'
 import { ChangeEvent, useEffect, useState } from 'react'
 
@@ -57,7 +57,7 @@ export default function Home() {
 	})
 	const isEndPage = (contactResData?.contact.length || 0) < CONTACT_LIST_LIMIT
 
-	const { refetch: refetchPhoneList } = useQuery<PhoneRes>(queryPhoneList)
+	const [refetchPhoneList] = useLazyQuery<PhoneRes>(queryPhoneList)
 
 	const onSearch = async (e: ChangeEvent<HTMLInputElement>) => {
 		try {
@@ -67,26 +67,29 @@ export default function Home() {
 				return
 			}
 			const res = await refetchPhoneList({
-				where: {
-					contact: {
-						first_name: {
-							_like: `%${e.target.value}%`,
+				variables: {
+					where: {
+						contact: {
+							first_name: {
+								_like: `%${e.target.value}%`,
+							},
 						},
 					},
 				},
 			})
-			const mappedRestoContact: IContact[] = res.data.phone.map((p) => ({
-				id: p.contact.id,
-				first_name: p.contact.first_name,
-				last_name: p.contact.last_name,
-				created_at: p.contact.created_at,
-				__typename: p.contact.__typename,
-				phones: [
-					{
-						number: p.number,
-					},
-				],
-			}))
+			const mappedRestoContact: IContact[] =
+				res.data?.phone.map((p) => ({
+					id: p.contact.id,
+					first_name: p.contact.first_name,
+					last_name: p.contact.last_name,
+					created_at: p.contact.created_at,
+					__typename: p.contact.__typename,
+					phones: [
+						{
+							number: p.number,
+						},
+					],
+				})) || []
 			setContactData(mappedRestoContact)
 			setSearchLoading(false)
 		} catch (error) {
@@ -115,6 +118,7 @@ export default function Home() {
 
 	useEffect(() => {
 		if (contactResData) updateLocalStorage(FAVORITE_CONTACT_KEY, favorites)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [favorites])
 
 	return (
@@ -294,6 +298,7 @@ export default function Home() {
 				isOpen={addModalProps.show}
 				onClose={() => setAddModalProps({ show: false })}
 				refetch={refetchContactList}
+				refetchPhoneList={refetchPhoneList}
 				style={{
 					zIndex: 30,
 				}}
@@ -312,6 +317,7 @@ export default function Home() {
 				onClose={() => setEditModalProps({ show: false })}
 				data={editModalProps.data}
 				refetch={refetchContactList}
+				refetchPhoneList={refetchPhoneList}
 				style={{
 					zIndex: 30,
 				}}
