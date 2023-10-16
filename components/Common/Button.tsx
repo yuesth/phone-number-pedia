@@ -11,7 +11,6 @@ const Button = ({
 	isDisabled = false,
 	isFullWidth = false,
 	isLoading = false,
-	className,
 	style,
 	type,
 }: ButtonProps) => {
@@ -86,7 +85,6 @@ const Button = ({
 				}),
 				style
 			)}
-			// className={className}
 			onClick={() => !isDisabled && onClick()}
 			type={type}
 		>
