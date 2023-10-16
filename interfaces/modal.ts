@@ -20,6 +20,8 @@ export interface AddModalProps extends ModalProps {
 
 export interface DeleteModalProps extends ModalProps {
 	data?: IContact
+	favorites: number[]
+	setFavorites: Dispatch<SetStateAction<number[]>>
 }
 
 export interface EditModalProps extends ModalProps {

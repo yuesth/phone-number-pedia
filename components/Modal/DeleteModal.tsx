@@ -19,6 +19,8 @@ const DeleteModal = ({
 	style,
 	data,
 	refetch,
+	favorites,
+	setFavorites,
 }: DeleteModalProps) => {
 	const theme = useTheme()
 	const { deleteContact } = ContactQueries()
@@ -40,6 +42,8 @@ const DeleteModal = ({
 				},
 				5000
 			)
+			if (favorites.includes(data?.id || 0))
+				setFavorites((prev) => prev.filter((f) => f !== data?.id))
 			await refetch?.({
 				limit: 10,
 				offset: 0,
@@ -64,7 +68,7 @@ const DeleteModal = ({
 					paddingHorizontal(theme, 8),
 					marginHorizontalAuto(),
 					mq({
-						width: ['100%', '20%'],
+						width: ['100%', '40%', '20%'],
 						borderRadius: ['0px', theme.rounded.xl],
 						backgroundColor: 'black',
 					}),
@@ -93,7 +97,7 @@ const DeleteModal = ({
 					)}
 				>
 					Are you sure want to delete this phone number{' '}
-					<strong>({data?.phones?.[0].number})</strong>?
+					<strong>({data?.phones?.[0]?.number})</strong>?
 				</p>
 				<Button color="danger" isFullWidth onClick={onDelete}>
 					{loading ? 'Loading...' : 'Delete'}

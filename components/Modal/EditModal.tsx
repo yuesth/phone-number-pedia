@@ -16,7 +16,6 @@ import { useEffect } from 'react'
 import { useToast } from '@/providers/ToastProvider'
 import { useMutation } from '@apollo/client'
 import { ContactQueries } from '@/quries/contact'
-import IconPlus from '../Svg/IconPlus'
 import IconTrash from '../Svg/IconTrash'
 
 const EditModal = ({
@@ -25,7 +24,6 @@ const EditModal = ({
 	style,
 	data,
 	refetch,
-	refetchPhoneList,
 }: EditModalProps) => {
 	const theme = useTheme()
 	const { setShowToastWithTimeout } = useToast()
@@ -62,7 +60,7 @@ const EditModal = ({
 					mutatePhone({
 						variables: {
 							pk_columns: {
-								number: data?.phones?.[idx].number,
+								number: data?.phones?.[idx]?.number,
 								contact_id: data?.id,
 							},
 							new_phone_number: phone.number,
@@ -140,20 +138,6 @@ const EditModal = ({
 						{...register('first_name', {
 							required: true,
 							pattern: /^[a-zA-Z0-9]+$/,
-							validate: async (value) => {
-								const res = await refetchPhoneList?.({
-									variables: {
-										where: {
-											contact: {
-												first_name: {
-													_like: `${value}`,
-												},
-											},
-										},
-									},
-								})
-								return `${res?.data?.phone.length || 0}` < '1'
-							},
 						})}
 						label={'First Name'}
 						placeholder="Enter first name..."
@@ -163,10 +147,8 @@ const EditModal = ({
 						errorMessage={
 							errors.first_name?.type === 'required'
 								? `You must fill first name`
-								: errors.first_name?.type === 'pattern'
-								? `First name must not contain special characters`
-								: errors.first_name?.type === 'validate' &&
-								  `First name must be unique`
+								: errors.first_name?.type === 'pattern' &&
+								  `First name must not contain special characters`
 						}
 					/>
 					<InputText
@@ -188,12 +170,7 @@ const EditModal = ({
 							gap: theme.spacing[2],
 						})}
 					>
-						<p css={css(title2(theme))}>Add Phone number</p>
-						<IconPlus
-							size={20}
-							style={{ stroke: `white`, cursor: `pointer` }}
-							onClick={() => append({ number: '' })}
-						/>
+						<p css={css(title2(theme))}>Phone number</p>
 					</div>
 					<div
 						css={css({

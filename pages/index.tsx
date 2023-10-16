@@ -139,7 +139,7 @@ export default function Home() {
 						alignItems: 'center',
 						width: `100%`,
 						marginBottom: theme.spacing[6],
-						flexDirection: [`column`, `row`],
+						flexDirection: [`column`, `column`, `row`],
 						flexWrap: `wrap`,
 					})
 				)}
@@ -147,9 +147,9 @@ export default function Home() {
 				<InputText
 					placeholder="Search first name..."
 					parentStyle={mq({
-						width: [`100%`, `75%`],
+						width: [`100%`, `100%`, `75%`],
 						marginRight: [0, theme.spacing[2]],
-						marginBottom: [theme.spacing[2], 0],
+						marginBottom: [theme.spacing[2], theme.spacing[2], 0],
 					})}
 					name="search"
 					onChange={(e) => {
@@ -161,6 +161,7 @@ export default function Home() {
 					css={css({
 						flex: `1 1 0%`,
 						display: `flex`,
+						width: '100%',
 						alignItems: `center`,
 						gap: theme.spacing[2],
 					})}
@@ -308,6 +309,8 @@ export default function Home() {
 				onClose={() => setDeleteModalProps({ show: false })}
 				data={deleteModalProps.data}
 				refetch={refetchContactList}
+				favorites={favorites}
+				setFavorites={setFavorites}
 				style={{
 					zIndex: 30,
 				}}
