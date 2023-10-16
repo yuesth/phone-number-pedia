@@ -67,15 +67,16 @@ const DeleteModal = ({
 					paddingVertical(theme, 8),
 					paddingHorizontal(theme, 8),
 					marginHorizontalAuto(),
+					{
+						borderRadius: theme.rounded.xl,
+						border: `1px solid ${theme.colors.gray}`,
+					},
 					mq({
 						width: ['100%', '40%', '20%'],
-						borderRadius: ['0px', theme.rounded.xl],
+						borderBottomLeftRadius: ['0px', theme.rounded.xl],
+						borderBottomRightRadius: ['0px', theme.rounded.xl],
 						backgroundColor: 'black',
-					}),
-					{
-						borderTop: theme.rounded.xl,
-						border: `1px solid ${theme.colors.gray}`,
-					}
+					})
 				)}
 			>
 				<p

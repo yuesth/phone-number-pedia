@@ -89,15 +89,16 @@ const AddModal = ({
 					paddingVertical(theme, 8),
 					paddingHorizontal(theme, 8),
 					marginHorizontalAuto(),
+					{
+						border: `1px solid ${theme.colors.gray}`,
+						borderRadius: theme.rounded.xl,
+					},
 					mq({
 						width: ['100%', '40%'],
-						borderRadius: ['0px', theme.rounded.xl],
+						borderBottomLeftRadius: ['0px', theme.rounded.xl],
+						borderBottomRightRadius: ['0px', theme.rounded.xl],
 						backgroundColor: 'black',
-					}),
-					{
-						borderTop: theme.rounded.xl,
-						border: `1px solid ${theme.colors.gray}`,
-					}
+					})
 				)}
 			>
 				<p
