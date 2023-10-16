@@ -1,6 +1,7 @@
 import Card from '@/components/Card/Card'
 import BaseLayout from '@/components/Common/BaseLayout'
 import Button from '@/components/Common/Button'
+import Header from '@/components/Common/Header'
 import InputText from '@/components/Common/InputText'
 import AddModal from '@/components/Modal/AddModal'
 import DeleteModal from '@/components/Modal/DeleteModal'
@@ -123,6 +124,7 @@ export default function Home() {
 
 	return (
 		<BaseLayout>
+			<Header />
 			<p
 				css={{
 					fontSize: theme.fontSize['4xl'],

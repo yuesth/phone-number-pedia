@@ -73,20 +73,20 @@ const Button = ({
 			css={css(
 				getColorStyle(),
 				getSizeStyle(),
-				{
+				mq({
 					width: isFullWidth ? '100%' : 'auto',
 					color: 'white',
 					borderStyle: 'none',
-					fontWeight: 600,
+					fontWeight: theme.fontWeight.semibold,
 					display: 'flex',
 					alignItems: 'center',
 					cursor: 'pointer',
 					justifyContent: 'center',
 					gap: theme.spacing[2],
-				},
+				}),
 				style
 			)}
-			className={className}
+			// className={className}
 			onClick={() => !isDisabled && onClick()}
 			type={type}
 		>
